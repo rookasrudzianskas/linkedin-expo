@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React, {useState} from 'react';
+import React from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {useRouter} from "expo-router";
 import {User} from "@/types";
