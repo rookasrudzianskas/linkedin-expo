@@ -18,10 +18,17 @@ export default function TabLayout() {
   return (
     <Tabs>
       <Tabs.Screen
+        name="index"
+        options={{
+          title: "Home",
+          tabBarIcon: ({ color }) => <TabBarIcon size={17} name="home" color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="network"
         options={{
           title: "My Network",
-          tabBarIcon: ({ color }) => <TabBarIcon size={15} name="group" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon size={17} name="group" color={color} />,
         }}
       />
       <Tabs.Screen
@@ -29,7 +36,7 @@ export default function TabLayout() {
         options={{
           title: "Post",
           tabBarIcon: ({ color }) => (
-            <TabBarIcon size={15} name="plus-square" color={color} />
+            <TabBarIcon size={17} name="plus-square" color={color} />
           ),
         }}
       />
@@ -37,7 +44,7 @@ export default function TabLayout() {
         name="notifications"
         options={{
           title: "Notifications",
-          tabBarIcon: ({ color }) => <TabBarIcon size={15} name="bell" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon size={17} name="bell" color={color} />,
         }}
       />
       <Tabs.Screen
