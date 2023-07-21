@@ -1,8 +1,10 @@
 //@ts-nocheck
 import React, {useLayoutEffect, useState} from 'react';
-import {Text, View, StyleSheet, TouchableOpacity, ScrollView} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, ScrollView, Image} from 'react-native';
 import {useLocalSearchParams, useNavigation} from "expo-router";
 import DUMMY_USER from '../../../assets/data/user.json';
+import {User} from "@/types";
+import ExperienceListItem from "@/components/ExperienceListItem";
 
 const UserProfile = () => {
   const [user, setUser] = useState<User>(DUMMY_USER);
@@ -18,28 +20,31 @@ const UserProfile = () => {
   return (
     <ScrollView>
       <View style={styles.headerContainer}>
-        <Image source={{ uri: user.backImage }} style={styles.backImage} />
-        <View style={styles.headerContent}>
+        <Image source={{ uri: user.backImage }} className="w-full h-[175px] mb-[-60px]" />
+        <View className="p-4">
           <Image source={{ uri: user.image }} style={styles.image} />
 
-          <Text style={styles.name}>{user.name}</Text>
-          <Text>{user.position}</Text>
+          <Text className="text-xl font-semibold">{user.name}</Text>
+          <Text className="text-gray-800">{user.position}</Text>
 
-          <TouchableOpacity activeOpacity={0.7} style={styles.button}>
-            <Text style={styles.buttonText}>Connect</Text>
+          <TouchableOpacity activeOpacity={0.7} className="text-white bg-blue-600 flex items-center justify-center py-1 rounded-2xl mt-2">
+            <Text className="text-white font-semibold text-base">Connect</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      {user.about && (
-        <View style={styles.container}>
-          <Text style={styles.title}>About</Text>
-          <Text>{user.about}</Text>
+      {user?.about && (
+        <View className="flex flex-col bg-white px-5 py-3">
+          <Text className="text-lg font-semibold">About</Text>
+          <Text className="text-gray-800">{user.about}</Text>
         </View>
       )}
 
-      <View style={styles.container}>
-        <Text style={styles.title}>Experience</Text>
+      <View className="flex flex-col bg-white px-5 py-3 mt-1">
+        <Text className="text-lg font-semibold">Experience</Text>
+        {user?.experience?.map((experience) => (
+          <ExperienceListItem experience={experience} key={experience.id} />
+        ))}
       </View>
     </ScrollView>
   );
@@ -48,27 +53,9 @@ const UserProfile = () => {
 export default UserProfile;
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-    marginVertical: 5,
-    backgroundColor: 'white',
-  },
   headerContainer: {
     marginBottom: 5,
     backgroundColor: 'white',
-  },
-  headerContent: {
-    padding: 10,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginVertical: 5,
-  },
-  backImage: {
-    width: '100%',
-    height: 150,
-    marginBottom: -60,
   },
   image: {
     width: 100,
@@ -77,22 +64,5 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: 'white',
     marginBottom: 10,
-  },
-  name: {
-    fontSize: 24,
-    fontWeight: '500',
-  },
-
-  button: {
-    backgroundColor: 'royalblue',
-    padding: 5,
-    borderRadius: 100,
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: '600',
-    fontSize: 16,
   },
 });
