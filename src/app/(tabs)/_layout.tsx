@@ -1,6 +1,7 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable, useColorScheme } from 'react-native';
+import {Link, Tabs, useRouter} from 'expo-router';
+import {Pressable, TouchableOpacity, useColorScheme} from 'react-native';
+import {useState} from "react";
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -14,6 +15,8 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const router = useRouter();
+  const [pressed, setPressed] = useState<boolean>(false);
 
   return (
     <Tabs>
@@ -22,6 +25,20 @@ export default function TabLayout() {
         options={{
           title: "Home",
           tabBarIcon: ({ color }) => <TabBarIcon size={17} name="home" color={color} />,
+          headerRight: () => (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => {
+                router.push('/search');
+              }}
+            >
+              <FontAwesome
+                name="search"
+                size={18}
+                style={{ marginRight: 20, color: colorScheme === 'dark' ? '#fff' : '#000' }}
+              />
+            </TouchableOpacity>
+          ),
         }}
       />
       <Tabs.Screen
