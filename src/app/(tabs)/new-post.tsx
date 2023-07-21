@@ -5,30 +5,47 @@ import DUMMY_USER from '../../../assets/data/user.json';
 import {User} from "@/types";
 import {useRouter} from "expo-router";
 import {EvilIcons} from "@expo/vector-icons";
+import * as ImagePicker from 'expo-image-picker';
+
+const OPTIONS = [
+  {
+    id: 0,
+    icon: <EvilIcons name="image" size={24} color="gray" />
+  },
+  {
+    id: 1,
+    icon: <EvilIcons name="camera" size={24} color="gray" />
+  },
+  {
+    id: 2,
+    icon: <EvilIcons name="location" size={24} color="gray" />
+  },
+  {
+    id: 3,
+    icon: <EvilIcons name="spinner-2" size={24} color="gray" />
+  }
+];
 
 const NewPost = () => {
   const [user, setUser] = useState<User>(DUMMY_USER);
   const router = useRouter();
   const [content, setContent] = useState<string>('');
+  const [image, setImage] = useState<string | null>(null);
 
-  const OPTIONS = [
-    {
-      id: 0,
-      icon: <EvilIcons name="image" size={24} color="gray" />
-    },
-    {
-      id: 1,
-      icon: <EvilIcons name="camera" size={24} color="gray" />
-    },
-    {
-      id: 2,
-      icon: <EvilIcons name="location" size={24} color="gray" />
-    },
-    {
-      id: 3,
-      icon: <EvilIcons name="spinner-2" size={24} color="gray" />
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 0.5,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
     }
-  ]
+  };
 
   const onSubmit = () => {
     console.warn('Post Submitted!');
@@ -57,9 +74,13 @@ const NewPost = () => {
         />
       </View>
 
+      <View className="m-5">
+        {image && <Image source={{ uri: image }} className="w-full h-44 rounded-lg shadow-lg" />}
+      </View>
+
       <View className="flex flex-row space-x-2 m-5">
         {OPTIONS.map((option) => (
-          <TouchableOpacity key={option.id} activeOpacity={0.8} className="flex bg-gray-200 w-10 h-10 items-center justify-center rounded-full">
+          <TouchableOpacity onPress={option.id === 0 ? () => pickImage() : () => {}} key={option.id} activeOpacity={0.8} className="flex bg-gray-200 w-10 h-10 items-center justify-center rounded-full">
             {option.icon}
           </TouchableOpacity>
         ))}
