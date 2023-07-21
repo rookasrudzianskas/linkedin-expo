@@ -1,6 +1,7 @@
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {AntDesign, FontAwesome, MaterialCommunityIcons} from '@expo/vector-icons';
 import {Post} from "@/types";
+import {useRouter} from "expo-router";
 
 type PostListItemProps = {
   post: Post;
@@ -21,8 +22,9 @@ const FooterButton = ({ text, icon }: FooterButtonProp) => (
 );
 
 const PostListItem = ({ post }: PostListItemProps) => {
+  const router = useRouter();
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={() => {}} className="bg-white w-full flex justify-center">
+    <TouchableOpacity activeOpacity={0.8} onPress={() => router.push<any>(`/posts/${post.id}`)} className="bg-white w-full flex justify-center">
       <View className="flex flex-row items-center p-5">
         <Image source={{ uri: post.author.image }} style={styles.userImage} />
         <View>
