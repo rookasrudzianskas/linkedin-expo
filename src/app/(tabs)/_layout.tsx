@@ -18,31 +18,35 @@ export default function TabLayout() {
   return (
     <Tabs>
       <Tabs.Screen
-        name="index"
+        name="network"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={colorScheme === 'dark' ? 'white' : 'black'}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          title: "My Network",
+          tabBarIcon: ({ color }) => <TabBarIcon size={15} name="group" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="new-post"
+        options={{
+          title: "Post",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon size={15} name="plus-square" color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="notifications"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "Notifications",
+          tabBarIcon: ({ color }) => <TabBarIcon size={15} name="bell" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="jobs"
+        options={{
+          title: "Jobs",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon size={15} name="briefcase" color={color} />
+          ),
         }}
       />
     </Tabs>
