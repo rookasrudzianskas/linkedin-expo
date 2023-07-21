@@ -51,6 +51,7 @@ const NewPost = () => {
     console.warn('Post Submitted!');
     router.push('/(tabs)/');
     setContent('');
+    setImage(null);
   }
 
   return (
