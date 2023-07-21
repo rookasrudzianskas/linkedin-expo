@@ -1,8 +1,7 @@
 //@ts-nocheck
 import React, {useLayoutEffect, useState} from 'react';
-import {Text, View, StyleSheet, FlatList, SafeAreaView} from 'react-native';
+import {FlatList, SafeAreaView} from 'react-native';
 import UserListItem from "@/components/UserListItem";
-import DUMMY_USER from '../../assets/data/user.json';
 import {useNavigation} from "expo-router";
 
 const USERS = [
