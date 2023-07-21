@@ -9,6 +9,7 @@ import {EvilIcons} from "@expo/vector-icons";
 const NewPost = () => {
   const [user, setUser] = useState<User>(DUMMY_USER);
   const router = useRouter();
+  const [content, setContent] = useState<string>('');
 
   const OPTIONS = [
     {
@@ -29,6 +30,12 @@ const NewPost = () => {
     }
   ]
 
+  const onSubmit = () => {
+    console.warn('Post Submitted!');
+    router.push('/(tabs)/');
+    setContent('');
+  }
+
   return (
     <View className="flex-1 bg-white">
       <TouchableOpacity activeOpacity={0.8} onPress={() => router.push<any>(`/users/${user.id}`)} className="flex bg-gray-100 rounded-lg max-w-[280px] m-5 flex-row items-center p-2">
@@ -44,6 +51,8 @@ const NewPost = () => {
           placeholder="What do you want to talk about?"
           className="h-[150px] m-5 mt-0"
           multiline
+          value={content}
+          onChangeText={setContent}
           numberOfLines={3}
         />
       </View>
@@ -63,7 +72,9 @@ const NewPost = () => {
             <Text className="text-xs text-red-600 font-semibold">NEW</Text>
           </View>
           <EvilIcons name="clock" size={24} color="black" />
-          <TouchableOpacity activeOpacity={0.8} className="flex bg-blue-500 w-16 h-7 items-center justify-center rounded-full m-5">
+          <TouchableOpacity
+            onPress={() => onSubmit()}
+            activeOpacity={0.8} className="flex bg-blue-500 w-16 h-7 items-center justify-center rounded-full m-5">
             <Text className="text-white">Post</Text>
           </TouchableOpacity>
         </View>
