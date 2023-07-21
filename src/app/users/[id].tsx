@@ -36,7 +36,9 @@ const UserProfile = () => {
       {user?.about && (
         <View className="flex flex-col bg-white px-5 py-3">
           <Text className="text-lg font-semibold">About</Text>
-          <Text className="text-gray-800">{user.about}</Text>
+          <Text className="text-gray-800" style={{
+            lineHeight: 19,
+          }}>{user.about}</Text>
         </View>
       )}
 
