@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {AntDesign, FontAwesome, MaterialCommunityIcons} from '@expo/vector-icons';
 import {Post} from "@/types";
 
@@ -22,7 +22,7 @@ const FooterButton = ({ text, icon }: FooterButtonProp) => (
 
 const PostListItem = ({ post }: PostListItemProps) => {
   return (
-    <View className="bg-white w-full flex justify-center">
+    <TouchableOpacity activeOpacity={0.8} onPress={() => {}} className="bg-white w-full flex justify-center">
       <View className="flex flex-row items-center p-5">
         <Image source={{ uri: post.author.image }} style={styles.userImage} />
         <View>
@@ -41,7 +41,7 @@ const PostListItem = ({ post }: PostListItemProps) => {
         <FooterButton text="Comment" icon="comment-outline" />
         <FooterButton text="Share" icon="sharealt" />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
