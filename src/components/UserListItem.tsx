@@ -4,7 +4,6 @@ import {Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {useRouter} from "expo-router";
 import {User} from "@/types";
 
-
 const UserListItem = ({user}: User) => {
   const router = useRouter();
   return (
