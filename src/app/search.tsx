@@ -57,7 +57,7 @@ const Search = () => {
       title: 'Search',
       headerSearchBarOptions: {
         placeholder: 'Search users',
-        onChangeText: setSearch,
+        onChangeText: (event) => setSearch(event.nativeEvent.text),
       }
     });
   });
