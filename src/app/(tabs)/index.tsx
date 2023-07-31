@@ -41,7 +41,7 @@ const Index = () => {
   const { loading, error, data, fetchMore, refetch } = useQuery(
     postPaginatedList,
     {
-      variables: { first: 2 },
+      variables: { first: 5 },
     }
   );
 
