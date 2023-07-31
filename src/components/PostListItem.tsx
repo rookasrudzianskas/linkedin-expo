@@ -28,10 +28,10 @@ const PostListItem = ({ post }: PostListItemProps) => {
   return (
     <View className="bg-white w-full flex justify-center">
       <TouchableOpacity activeOpacity={0.8} onPress={() => router.push<any>(`/users/${user.id}`)} className="flex flex-row items-center p-5">
-        <Image source={{ uri: post.author.image }} style={styles.userImage} />
+        <Image source={{ uri: post.profile.image }} style={styles.userImage} />
         <View>
-          <Text className="font-[600] mb-1">{post.author.name}</Text>
-          <Text className="text-[12px] text-gray-600">{post.author.position}</Text>
+          <Text className="font-[600] mb-1">{post.profile.name}</Text>
+          <Text className="text-[12px] text-gray-600">{post.profile.position}</Text>
         </View>
       </TouchableOpacity>
 
