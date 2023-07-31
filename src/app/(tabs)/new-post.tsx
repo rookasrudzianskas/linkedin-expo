@@ -43,7 +43,9 @@ const NewPost = () => {
   const router = useRouter();
   const [content, setContent] = useState<string>('');
   const [image, setImage] = useState<string | null>(null);
-  const [handleMutation, {data, loading, error}] = useMutation(insertPost);
+  const [handleMutation, {data, loading, error}] = useMutation(insertPost, {
+    refetchQueries: ['PostPaginatedListQuery'],
+  });
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -52,8 +54,6 @@ const NewPost = () => {
       allowsEditing: true,
       quality: 0.5,
     });
-
-    console.log(result);
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
