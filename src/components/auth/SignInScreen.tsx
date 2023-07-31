@@ -26,7 +26,7 @@ export default function SignInScreen() {
     }
   };
   return (
-    <View className="pt-16 flex-1 space-y-2 items-center justify-center">
+    <View className="flex-1 space-y-2 items-center">
       <View className="space-y-2">
         <TextInput
           autoCapitalize="none"

@@ -50,7 +50,7 @@ export default function SignUpScreen() {
   };
 
   return (
-    <View className="pt-16 flex-1 items-center justify-center">
+    <View className="flex-1 items-center">
       {!pendingVerification && (
         <View className="space-y-2">
           <View className="">
