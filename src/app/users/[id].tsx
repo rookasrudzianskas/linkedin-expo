@@ -46,8 +46,6 @@ const UserProfile = () => {
   if (loading) return <View className="h-screen flex items-center justify-center"><ActivityIndicator /></View>;
   if (error) return <View className="h-screen flex items-center justify-center"><Text>Something went wrong?</Text></View>;
 
-  console.log(user)
-
   return (
     <ScrollView>
       <View style={styles.headerContainer}>
@@ -58,7 +56,7 @@ const UserProfile = () => {
           <Text className="text-xl font-semibold">{user.name}</Text>
           <Text className="text-gray-800">{user.position}</Text>
 
-          <TouchableOpacity activeOpacity={0.7} className="text-white bg-blue-600 flex items-center justify-center py-1 rounded-2xl mt-2">
+          <TouchableOpacity onPress={onConnect} activeOpacity={0.7} className="text-white bg-blue-600 flex items-center justify-center py-1 rounded-2xl mt-2">
             <Text className="text-white font-semibold text-base">Connect</Text>
           </TouchableOpacity>
         </View>
