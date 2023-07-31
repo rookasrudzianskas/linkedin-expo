@@ -10,7 +10,7 @@ export default function SignUpScreen() {
   const [pendingVerification, setPendingVerification] = React.useState(false);
   const [code, setCode] = React.useState("");
 
-  // start the sign up process.
+  // start the sign-up process.
   const onSignUpPress = async () => {
     if (!isLoaded) {
       return;
@@ -63,7 +63,7 @@ export default function SignUpScreen() {
             />
           </View>
 
-          <View>
+          <View className="">
             <TextInput
               value={password}
               className="border-2 border-gray-300 rounded-md w-64 h-10 px-2"
@@ -83,16 +83,21 @@ export default function SignUpScreen() {
         </View>
       )}
       {pendingVerification && (
-        <View>
+        <View className="space-y-3">
           <View>
             <TextInput
               value={code}
               placeholder="Code..."
+              className="border-2 border-gray-300 rounded-md w-64 h-10 px-2"
               onChangeText={(code) => setCode(code)}
             />
           </View>
-          <TouchableOpacity onPress={onPressVerify}>
-            <Text>Verify Email</Text>
+          <TouchableOpacity
+            className="bg-blue-500 rounded-md px-2 py-1"
+            onPress={onPressVerify}>
+            <Text
+              className="text-white text-center"
+            >Verify Email</Text>
           </TouchableOpacity>
         </View>
       )}
