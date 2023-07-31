@@ -6,6 +6,7 @@ import {User} from "@/types";
 import {useRouter} from "expo-router";
 import {EvilIcons} from "@expo/vector-icons";
 import * as ImagePicker from 'expo-image-picker';
+import {gql} from "@apollo/client";
 
 const OPTIONS = [
   {
@@ -25,6 +26,17 @@ const OPTIONS = [
     icon: <EvilIcons name="spinner-2" size={24} color="gray" />
   }
 ];
+
+const insertPost = gql`
+    mutation MyMutation($content: String, $image: String, $userId: ID) {
+        insertPost(content: $content, image: $image, userid: $userId) {
+            content
+            id
+            image
+            userid
+        }
+    }
+`;
 
 const NewPost = () => {
   const [user, setUser] = useState<User>(DUMMY_USER);
