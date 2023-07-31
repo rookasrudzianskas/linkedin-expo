@@ -3,6 +3,23 @@ import React from 'react';
 import {Text, View, StyleSheet, FlatList} from 'react-native';
 import PostListItem from "@/components/PostListItem";
 import posts from "../../../assets/data/posts.json";
+import {gql} from "@apollo/client";
+
+const postList = gql`
+    query postList {
+        postList {
+            id
+            image
+            content
+            profile {
+                image
+                id
+                name
+                position
+            }
+        }
+    }
+`;
 
 const Index = () => {
   return (
