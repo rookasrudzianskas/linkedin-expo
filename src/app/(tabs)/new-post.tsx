@@ -6,7 +6,7 @@ import {User} from "@/types";
 import {useRouter} from "expo-router";
 import {EvilIcons} from "@expo/vector-icons";
 import * as ImagePicker from 'expo-image-picker';
-import {gql} from "@apollo/client";
+import {gql, useMutation} from "@apollo/client";
 
 const OPTIONS = [
   {
@@ -43,6 +43,7 @@ const NewPost = () => {
   const router = useRouter();
   const [content, setContent] = useState<string>('');
   const [image, setImage] = useState<string | null>(null);
+  const [handleMutation, {data, loading, error}] = useMutation(insertPost);
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -59,11 +60,22 @@ const NewPost = () => {
     }
   };
 
-  const onSubmit = () => {
-    console.warn('Post Submitted!');
-    router.push('/(tabs)/');
-    setContent('');
-    setImage(null);
+  const onSubmit = async () => {
+    try {
+      await handleMutation({
+        variables: {
+          userId: 2,
+          content,
+        }
+      })
+      console.warn('Post Submitted!');
+      router.push('/(tabs)/');
+      setContent('');
+      setImage(null);
+    } catch (e) {
+      console.warn(e);
+    }
+
   }
 
   return (
@@ -109,7 +121,7 @@ const NewPost = () => {
           <TouchableOpacity
             onPress={() => onSubmit()}
             activeOpacity={0.8} className="flex bg-blue-500 w-16 h-7 items-center justify-center rounded-full m-5">
-            <Text className="text-white">Post</Text>
+            <Text className="text-white">{loading ? 'Posting' : 'Post'}</Text>
           </TouchableOpacity>
         </View>
       </View>
