@@ -7,10 +7,10 @@ type ExperienceListItemProps = {
 const ExperienceListItem = ({ experience }: ExperienceListItemProps) => {
   return (
     <TouchableOpacity onPress={() => {}} activeOpacity={0.8} className="flex flex-row items-center space-x-3 border-b border-gray-300 py-3">
-      <Image source={{ uri: experience.companyImage }} className="w-12 h-12 rounded-full" />
+      <Image source={{ uri: experience.companyimage }} className="w-12 h-12 rounded-full" />
       <View>
         <Text style={styles.title}>{experience.title}</Text>
-        <Text>{experience.companyName}</Text>
+        <Text>{experience.companyname}</Text>
       </View>
     </TouchableOpacity>
   );

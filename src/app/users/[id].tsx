@@ -1,26 +1,57 @@
 //@ts-nocheck
 import React, {useLayoutEffect, useState} from 'react';
-import {Text, View, StyleSheet, TouchableOpacity, ScrollView, Image} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity, ScrollView, Image, ActivityIndicator} from 'react-native';
 import {useLocalSearchParams, useNavigation} from "expo-router";
 import DUMMY_USER from '../../../assets/data/user.json';
 import {User} from "@/types";
 import ExperienceListItem from "@/components/ExperienceListItem";
+import {gql, useQuery} from "@apollo/client";
+
+const query = gql`
+    query MyQuery($id: ID!) {
+        profile(id: $id) {
+            id
+            name
+            image
+            position
+            about
+            experience {
+                id
+                companyname
+                companyimage
+                title
+                userid
+            }
+            backimage
+        }
+    }
+`;
 
 const UserProfile = () => {
-  const [user, setUser] = useState<User>(DUMMY_USER);
   const { id } = useLocalSearchParams();
+
+  const { loading, error, data } = useQuery(query, { variables: { id: 2 } });
+  const user = data?.profile;
+
   const navigation = useNavigation();
 
+  const onConnect = () => {
+    console.warn('Connect Pressed');
+  };
+
   useLayoutEffect(() => {
-    navigation.setOptions({
-      title: user.name,
-    });
-  }, [navigation]);
+    navigation.setOptions({ title: user?.name || 'User' });
+  }, [user?.name]);
+
+  if (loading) return <View className="h-screen flex items-center justify-center"><ActivityIndicator /></View>;
+  if (error) return <View className="h-screen flex items-center justify-center"><Text>Something went wrong?</Text></View>;
+
+  console.log(user)
 
   return (
     <ScrollView>
       <View style={styles.headerContainer}>
-        <Image source={{ uri: user.backImage }} className="w-full h-[175px] mb-[-60px]" />
+        <Image source={{ uri: user.backimage }} className="w-full h-[175px] mb-[-60px]" />
         <View className="p-4">
           <Image source={{ uri: user.image }} style={styles.image} />
 
