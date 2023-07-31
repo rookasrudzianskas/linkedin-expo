@@ -1,13 +1,40 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
-import {ApolloProvider} from "@apollo/client";
-import client from "@/apollo/Client";
-import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
-import AuthScreen from "@/components/auth/AuthScreen";
+import { ActivityIndicator, useColorScheme } from 'react-native';
+import { ApolloProvider } from '@apollo/client';
+import client from '@/apollo/Client';
+import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
+import AuthScreen from '@/components/auth/AuthScreen';
+import * as SecureStore from 'expo-secure-store';
+import UserContextProvider, { useUserContext } from '@/context/UserContext';
+import SetupProfileScreen from '@/components/auth/SetupProfileScreen';
+
+const CLERK_PUBLISHABLE_KEY =
+  process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY || '';
+
+const tokenCache = {
+  async getToken(key: string) {
+    try {
+      return SecureStore.getItemAsync(key);
+    } catch (err) {
+      return null;
+    }
+  },
+  async saveToken(key: string, value: string) {
+    try {
+      return SecureStore.setItemAsync(key, value);
+    } catch (err) {
+      return;
+    }
+  },
+};
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -43,48 +70,55 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return <RootLayoutNavWithProviders />;
 }
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-  const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY || '';
 
-  // const tokenCache = {
-  //   async getToken(key: string) {
-  //     try {
-  //       return SecureStore.getItemAsync(key);
-  //     } catch (err) {
-  //       return null;
-  //     }
-  //   },
-  //   async saveToken(key: string, value: string) {
-  //     try {
-  //       return SecureStore.setItemAsync(key, value);
-  //     } catch (err) {
-  //       return;
-  //     }
-  //   },
-  // };
+function RootLayoutNavWithProviders() {
+  const colorScheme = useColorScheme();
 
   return (
     <ClerkProvider
-      publishableKey={CLERK_PUBLISHABLE_KEY}>
-      {/*tokenCache={tokenCache}*/}
+      publishableKey={CLERK_PUBLISHABLE_KEY}
+      tokenCache={tokenCache}
+    >
       <ApolloProvider client={client}>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <SignedIn>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-              <Stack.Screen name="posts/[id]" options={{ title: 'Post' }} />
-              <Stack.Screen name="users/[id]" options={{ headerShown: false }} />
-            </Stack>
-          </SignedIn>
-          <SignedOut>
-            <AuthScreen />
-          </SignedOut>
-        </ThemeProvider>
+        <UserContextProvider>
+          <ThemeProvider
+            value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+          >
+            <RootLayoutNav />
+          </ThemeProvider>
+        </UserContextProvider>
       </ApolloProvider>
     </ClerkProvider>
+  );
+}
+
+function RootLayoutNav() {
+  const { dbUser, authUser, loading } = useUserContext();
+  console.log(authUser);
+  console.log(dbUser);
+
+  if (loading) {
+    return <ActivityIndicator />;
+  }
+
+  return (
+    <>
+      <SignedIn>
+        {!dbUser ? (
+          <SetupProfileScreen />
+        ) : (
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="posts/[id]" options={{ title: 'Post' }} />
+          </Stack>
+        )}
+      </SignedIn>
+      <SignedOut>
+        <AuthScreen />
+      </SignedOut>
+    </>
   );
 }
