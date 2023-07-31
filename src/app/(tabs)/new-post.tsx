@@ -7,6 +7,7 @@ import {useRouter} from "expo-router";
 import {EvilIcons} from "@expo/vector-icons";
 import * as ImagePicker from 'expo-image-picker';
 import {gql, useMutation} from "@apollo/client";
+import {useUserContext} from "@/context/UserContext";
 
 const OPTIONS = [
   {
@@ -41,6 +42,7 @@ const insertPost = gql`
 const NewPost = () => {
   const [user, setUser] = useState<User>(DUMMY_USER);
   const router = useRouter();
+  const { dbUser } = useUserContext();
   const [content, setContent] = useState<string>('');
   const [image, setImage] = useState<string | null>(null);
   const [handleMutation, {data, loading, error}] = useMutation(insertPost, {
@@ -64,19 +66,19 @@ const NewPost = () => {
     try {
       await handleMutation({
         variables: {
-          userId: 2,
+          userid: dbUser.id,
           content,
-        }
-      })
-      console.warn('Post Submitted!');
+        },
+      });
+
       router.push('/(tabs)/');
       setContent('');
       setImage(null);
     } catch (e) {
-      console.warn(e);
+      console.log(e);
     }
+  };
 
-  }
 
   return (
     <View className="flex-1 bg-white">
