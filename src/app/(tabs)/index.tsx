@@ -1,8 +1,7 @@
 //@ts-nocheck
-import React from 'react';
-import {Text, View, StyleSheet, FlatList, ActivityIndicator} from 'react-native';
+import React, {useState} from 'react';
+import {Text, View, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity} from 'react-native';
 import PostListItem from "@/components/PostListItem";
-import posts from "../../../assets/data/posts.json";
 import {gql, useQuery} from "@apollo/client";
 
 const postList = gql`
@@ -21,18 +20,65 @@ const postList = gql`
     }
 `;
 
+const postPaginatedList = gql`
+    query PostPaginatedListQuery($first: Int, $after: Int) {
+        postPaginatedList(first: $first, after: $after) {
+            id
+            content
+            image
+            profile {
+                id
+                name
+                position
+                image
+            }
+        }
+    }
+`;
+
 const Index = () => {
-  const {loading, error, data} = useQuery(postList);
+  const [hasMore, setHasMore] = useState(true);
+  const { loading, error, data, fetchMore, refetch } = useQuery(
+    postPaginatedList,
+    {
+      variables: { first: 5 },
+    }
+  );
+
+  const loadMore = async () => {
+    if (!hasMore) {
+      return;
+    }
+
+    const res = await fetchMore({
+      variables: { after: data.postPaginatedList.length },
+    });
+    if (res.data.postPaginatedList.length === 0) {
+      setHasMore(false);
+    }
+  };
+
+
   if (loading) return <View className="h-screen flex items-center justify-center"><ActivityIndicator /></View>;
   if (error) return <View className="h-screen flex items-center justify-center"><Text>Something went wrong?</Text></View>;
 
   return (
-    <View>
+    <View className="flex-1">
       <FlatList
-        data={data.postList}
+        data={data.postPaginatedList}
         renderItem={({ item }) => <PostListItem post={item} />}
         contentContainerStyle={{ gap: 10 }}
         showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => item.id.toString()}
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.5}
+        refreshing={loading}
+        onRefresh={refetch}
+        ListFooterComponent={() => (
+          <TouchableOpacity activeOpacity={0.7} onPress={loadMore} className="flex items-center justify-center">
+            <Text className="text-sm font-semibold text-purple-600">Load More</Text>
+          </TouchableOpacity>
+        )}
       />
     </View>
   );
