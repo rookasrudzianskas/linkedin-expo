@@ -58,7 +58,6 @@ const Index = () => {
     }
   };
 
-
   if (loading) return <View className="h-screen flex items-center justify-center"><ActivityIndicator /></View>;
   if (error) return <View className="h-screen flex items-center justify-center"><Text>Something went wrong?</Text></View>;
 
@@ -69,13 +68,11 @@ const Index = () => {
         renderItem={({ item }) => <PostListItem post={item} />}
         contentContainerStyle={{ gap: 10 }}
         showsVerticalScrollIndicator={false}
-        keyExtractor={(item) => item.id.toString()}
         onEndReached={loadMore}
-        onEndReachedThreshold={0.5}
         refreshing={loading}
         onRefresh={refetch}
         ListFooterComponent={() => (
-          <TouchableOpacity activeOpacity={0.7} onPress={loadMore} className="flex items-center justify-center">
+          <TouchableOpacity activeOpacity={0.7} onPress={() => loadMore()} className="flex items-center justify-center">
             <Text className="text-sm font-semibold text-purple-600">Load More</Text>
           </TouchableOpacity>
         )}
