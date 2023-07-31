@@ -1,4 +1,20 @@
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import {ApolloClient, InMemoryCache, ApolloProvider, TypePolicies} from '@apollo/client';
+
+const typePolicies: TypePolicies = {
+  Query: {
+    fields: {
+      postPaginatedList: {
+        keyArgs: false,
+        merge(existing = [], incoming) {
+          return [...existing, ...incoming];
+        }
+      }
+    }
+  }
+};
+
+//Provide it to InMemoryCache
+new InMemoryCache({ typePolicies });
 
 const client = new ApolloClient({
   uri: 'https://saltillo.stepzen.net/api/bumptious-hummingbird/__graphql',
