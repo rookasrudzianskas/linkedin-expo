@@ -7,10 +7,10 @@ const typePolicies: TypePolicies = {
         keyArgs: false,
         merge(existing = [], incoming) {
           return [...existing, ...incoming];
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 };
 
 //Provide it to InMemoryCache
