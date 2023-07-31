@@ -1,8 +1,9 @@
 //@ts-nocheck
 import React, {useLayoutEffect, useState} from 'react';
-import {FlatList, SafeAreaView} from 'react-native';
+import {ActivityIndicator, FlatList, SafeAreaView, View, Text} from 'react-native';
 import UserListItem from "@/components/UserListItem";
 import {useNavigation} from "expo-router";
+import {gql, useQuery} from "@apollo/client";
 
 const USERS = [
   {
@@ -29,13 +30,28 @@ const USERS = [
     "backImage": "https://i.ytimg.com/vi/_RO6Q1qhm0c/maxresdefault.jpg",
     "about": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley",
   }
-
 ]
+
+const query = gql`
+  query profileSearch($term: String) {
+    profileSearch(term: $term) {
+      id
+      image
+      name
+      position
+    }
+  }
+`;
 
 const Search = () => {
   const [user, setUser] = useState(USERS);
   const navigation = useNavigation();
   const [search, setSearch] = useState('' as string);
+
+  const { data, loading, error } = useQuery(query, {
+    variables: { term: `%${search}%` },
+  });
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: 'Search',
@@ -46,14 +62,17 @@ const Search = () => {
     });
   });
 
+  if (loading) return <View className="h-screen flex items-center justify-center"><ActivityIndicator /></View>;
+  if (error) return <View className="h-screen flex items-center justify-center"><Text>Something went wrong?</Text></View>;
+
   return (
-    <SafeAreaView className="flex-1 bg-white pt-9">
+    <View style={{ backgroundColor: 'white', flex: 1 }}>
       <FlatList
-        data={USERS}
-        keyExtractor={(item) => item.id}
-        renderItem={({item}) => <UserListItem user={item} />}
+        contentContainerStyle={{ marginTop: 150 }}
+        data={data?.profileSearch || []}
+        renderItem={({ item }) => <UserListItem user={item} />}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
